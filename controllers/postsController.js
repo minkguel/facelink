@@ -4,13 +4,10 @@ const asyncHandler = require('express-async-handler');
 
 
 exports.createPosts = asyncHandler(async (req, res) => {
-
         const { text } = req.body;
         const userId = req.params.id;
-
         const newPost = new postModel({ user_id: userId, text });
         const savedPost = await newPost.save();
-
         await userModel.findByIdAndUpdate(userId, { $push: { posts: savedPost._id } });
 
     return res.status(201).json({
@@ -19,6 +16,7 @@ exports.createPosts = asyncHandler(async (req, res) => {
         post: savedPost
     });
 });
+
 
 exports.deletePost = asyncHandler(async (req, res) => {
     const post_id = req.params.id;
