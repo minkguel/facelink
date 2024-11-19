@@ -5,7 +5,7 @@ const asyncHandler = require('express-async-handler');
 
 exports.createComment = asyncHandler(async (req, res) => {
    const { text } = req.body;
-   const postId = req.params.id;
+   const commentId = req.params.id;
 
 
 });
@@ -13,14 +13,19 @@ exports.createComment = asyncHandler(async (req, res) => {
 
 exports.deleteComment = asyncHandler(async (req, res) => {
     const { text } = req.body;
-    const postId = req.params.id;
+    const commentId = req.params.id;
 
-    const deletePost = await commentModel.findByIdAndDelete
+    const deletePost = await commentModel.findByIdAndDelete(
+        commentId,
+        {text},
+        {new: true}
+    )
+
 });
 
 
 exports.updateComment = asyncHandler(async (req, res) => {
     const { text } = req.body;
-    const postId = req.params.id;
+    const commentId = req.params.id;
 
 });
