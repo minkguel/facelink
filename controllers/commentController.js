@@ -1,6 +1,7 @@
 const postModel = require('../models/postsModel');
 const commentModel = require('../models/commentModel');
 const asyncHandler = require('express-async-handler');
+const userModel = require("../models/userModel");
 
 
 exports.createComment = asyncHandler(async (req, res) => {
@@ -33,7 +34,6 @@ exports.deleteComment = asyncHandler(async (req, res) => {
 
 
 exports.updateComment = asyncHandler(async (req, res) => {
-    const { text } = req.body;
-    const comment_id = req.params.id;
-
+    await commentModel.findByIdAndUpdate(req.params.id, req.body, {new: true})
+    return res.status(201).json({ message: 'Comment has been updated' });
 });

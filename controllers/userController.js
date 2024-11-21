@@ -1,4 +1,5 @@
 const userModel = require('../models/userModel')
+const postModel = require('../models/postsModel')
 const asyncHandler = require('express-async-handler');
 
 exports.createUser = asyncHandler (async (req,res) => {
@@ -21,4 +22,9 @@ exports.getAllUsers = asyncHandler(async (req, res) => {
 exports.deleteUser = asyncHandler (async(req, res) => {
         await userModel.findByIdAndDelete(req.params.id)
         return res.status(200).send({message: 'User has succesfully been deleted'});
+});
+
+exports.getUsersPosts = asyncHandler(async (req, res) => {
+        const userPosts = await postModel.find({user_id: req.params.id});
+        return res.status(200).send(userPosts);
 });

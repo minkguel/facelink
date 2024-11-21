@@ -5,21 +5,22 @@ const postController = require("../controllers/postsController");
 const commentController = require("../controllers/commentController");
 
 // User routes
-router.post('/createUser', userController.createUser);
-router.put('/updateUser/:id', userController.updateUser);
-router.get('/getAllUsers', userController.getAllUsers);
-router.delete('/deleteUser/:id', userController.deleteUser);
+router.post('/users', userController.createUser);
+router.put('/users/:id', userController.updateUser);
+router.get('/users', userController.getAllUsers);
+router.delete('/users/:id', userController.deleteUser);
+router.get('/users/:id/posts', userController.getUsersPosts);
 
 // Post routes
-router.post('/createPost/user/:id/', postController.createPosts);
-router.delete('/deletePost/:id/', postController.deletePost);
-router.put('/updatePost/:id/', postController.updatePost);
-router.put('/likePost/:id/like', postController.likePost);
+router.post('/posts/:id/', postController.createPosts);
+router.delete('/posts/:id/', postController.deletePost);
+router.put('/posts/:id/', postController.updatePost);
+router.put('/posts/:id/like', postController.likePost);
+router.get('/posts', postController.findMostLikedPosts);
+router.get('/posts/mostLiked', postController.amountOfPostByUsers)
 
-router.post('/createComment/:id/', commentController.createComment);
-router.delete('/deleteComment/:id/', commentController.deleteComment);
-router.put('/updateComment/:id/', commentController.updateComment);
-
-
+router.post('/comment/:id/', commentController.createComment);
+router.delete('/comment/:id/', commentController.deleteComment);
+router.put('/comment/:id/', commentController.updateComment);
 
 module.exports = router;

@@ -47,15 +47,17 @@ exports.updatePost = asyncHandler(async (req, res) => {
 exports.likePost = asyncHandler(async (req, res) => {
     const post_id = req.params.id;
 
-    const updateLikes = await postModel.findByIdAndUpdate(
-        post_id,
-        { $inc: { likes: 1 } },
-        { new: true }
-    );
+    const updateLikes = await postModel.findByIdAndUpdate(post_id, { $inc: { likes: 1 } }, { new: true });
 
-    return res.status(200).json({
-        success: true,
-        message: "Post liked successfully",
-        post: updateLikes
-    });
+    return res.status(200).json({ success: true, message: "Post liked successfully", post: updateLikes });
+});
+
+exports.findMostLikedPosts = asyncHandler(async (req, res) => {
+    const mostLikedPosts = await postModel.aggregate([ {$sort: { likes: -1} }, { $limit: 5 }]);
+    return res.status(200).json({ posts: mostLikedPosts });
+});
+
+exports.amountOfPostByUsers = asyncHandler(async (req, res) => {
+    const post = await postModel.aggregate([{ "$group": { "_id": "$user_id", "totalPosts": { "$sum": 1 } } }, { "$sort": { "totalPosts": -1 } }]);
+    return res.status(200).json(post);
 });
