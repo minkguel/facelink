@@ -19,6 +19,7 @@ router.put('/posts/:id/like', postController.likePost);
 router.get('/posts', postController.findMostLikedPosts);
 router.get('/posts/mostLiked', postController.amountOfPostByUsers)
 
+// Comment routes
 router.post('/comment/:id/', commentController.createComment);
 router.delete('/comment/:id/', commentController.deleteComment);
 router.put('/comment/:id/', commentController.updateComment);

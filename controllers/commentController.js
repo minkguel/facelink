@@ -1,7 +1,6 @@
 const postModel = require('../models/postsModel');
 const commentModel = require('../models/commentModel');
 const asyncHandler = require('express-async-handler');
-const userModel = require("../models/userModel");
 
 
 exports.createComment = asyncHandler(async (req, res) => {
@@ -9,6 +8,7 @@ exports.createComment = asyncHandler(async (req, res) => {
    const post_id = req.params.id;
    const newComment = new commentModel({ post_id: post_id, text });
    await newComment.save();
+   await postModel.findByIdAndUpdate(post_id, { $push: { comments: newComment._id } });
 
    return res.status(201).json({
         success: true,
@@ -21,19 +21,32 @@ exports.createComment = asyncHandler(async (req, res) => {
 exports.deleteComment = asyncHandler(async (req, res) => {
     const comment_id = req.params.id;
 
-    const deletePost = await commentModel.findByIdAndDelete(
+    const deleteComment = await commentModel.findByIdAndDelete(
         comment_id
     )
 
     return res.status(204).json({
         success: true,
         message: "Post has been deleted",
-        post: deletePost
+        post: deleteComment
     })
 });
 
 
 exports.updateComment = asyncHandler(async (req, res) => {
-    await commentModel.findByIdAndUpdate(req.params.id, req.body, {new: true})
-    return res.status(201).json({ message: 'Comment has been updated' });
+    const { text } = req.body;
+    const comment_id = req.params.id;
+
+    const updateComment = await commentModel.findByIdAndUpdate(
+        comment_id,
+ {text},
+        {new: true}
+    )
+
+    return res.status(200).json({
+        success: true,
+        message: "Comment has been updated",
+        post: updateComment
+    });
+
 });
